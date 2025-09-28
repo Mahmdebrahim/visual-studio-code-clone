@@ -11,11 +11,8 @@ interface IProps{
 
 
 const RenderFileIcon = ({filename,isFolder,isopen}:IProps) => {
-    const extention = filename.split('.').pop()// split=> to separet elname from their extention w men khelal el extention a7ot el icon
-                                               // pop()=> 3lshan tedeny akher 7aga f el array elly hia extention
-
-
-if(extention && Object.prototype.hasOwnProperty.call(extensionIconPaths,extention)){
+    const extention = filename.split('.').pop();
+    if(extention && Object.prototype.hasOwnProperty.call(extensionIconPaths,extention)){
     const iconPath = isFolder
     ?  isopen 
     ?  `${extensionIconPaths[extention]}-open.svg`:

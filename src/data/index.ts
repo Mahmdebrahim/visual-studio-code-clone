@@ -1,49 +1,16 @@
 import type { IFile } from "../interfaces";
-
-// export const fileTree:IFile = {
-//     id: "1",
-//     name: "vs code",
-//     isFolder: true,
-//     chlid: [
-//         {
-//             isFolder: true,
-//             id: "2",
-//             name: "node_modules", 
-//             chlid:[
-//                 {
-//                     isFolder: true,
-//                     id: "3",
-//                     name: ".vite",
-//                     chlid:[{isFolder:false,id: "4", name:"react.js"}]
-//                 }
-//             ]
-//         },
-//         {
-//             isFolder:true,
-//             id: "5",
-//             name: "Puplic", 
-//             chlid:[{isFolder:false,id: "6", name:".git"}]
-//         },
-//         {
-//             isFolder:false,
-//             id: "7",
-//             name: "index.html", 
-//             content: "<div>HELLO WORLD!<div/>"
-//         },
-//         {
-//             isFolder:false,
-//             id: "8",
-//             name: "index.tsx", 
-//         }
-//     ]
-// }
-
-
-
 import { v4 as uuid } from 'uuid';
 
-
-export const fileTree:IFile={
+const loadFileTree = (): IFile => {
+  try {
+    const storedTree = localStorage.getItem('fileTree');
+    if (storedTree) {
+      return JSON.parse(storedTree) as IFile;
+    }
+  } catch (e) {
+    console.error("Failed to load file tree from localStorage:", e);
+  }
+  const newTree:IFile={
     id:uuid(),
     name:"VS Code Clone ",
     isFolder:true,
@@ -61,9 +28,50 @@ export const fileTree:IFile={
                 isFolder:true,
                 chlidren:[{
                     id:uuid(),
-                        name:"react.js",
+                        name:"main.js",
                         isFolder:false,
-                        // content:""
+                        content:`const fileTree = {
+  id: 1,
+  name: 'root',
+  isFolder: true,
+  chlidren: [],
+};
+
+const saveFileTree = () => {
+  localStorage.setItem('fileTree', JSON.stringify(fileTree));
+};
+
+const loadFileTree = () => {
+  const storedFileTree = localStorage.getItem('fileTree');
+  if (storedFileTree) {
+    return JSON.parse(storedFileTree);
+  } else {
+    return fileTree;
+  }
+};
+
+const addFile = (name, content) => {
+  const newFile = {
+    id: Date.now(),
+    name,
+    isFolder: false,
+    content,
+  };
+  fileTree.chlidren.push(newFile);
+  saveFileTree();
+};
+
+const loadFiles = () => {
+  const loadedFileTree = loadFileTree();
+  console.log(loadedFileTree);
+};
+
+// إضافة ملف جديد
+addFile('newFile.txt', 'Hello World!');
+
+// تحميل الملفات
+loadFiles();
+`
                     },
                 
                 ]
@@ -79,8 +87,7 @@ export const fileTree:IFile={
                     id:uuid(),
                     name:"index.html",
                     isFolder:false,
-                    content:`
-<!doctype html>
+                    content:`<!doctype html>mmm
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -126,6 +133,27 @@ const Input = forwardRef(({ ...rest }:IProps, ref:Ref<HTMLInputElement>) => {
 
 export default Input;`
                         },
+                        {
+                        id:uuid(),
+                            name:"Button.tsx",
+                            isFolder:false,
+                            content:`import { ButtonHTMLAttributes, Ref, forwardRef } from "react";
+interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
+const Button = forwardRef(({ ...rest }:IProps, ref:Ref<HTMLButtonElement>) => {
+    return (
+    <input
+        ref={ref}
+        className="border-[1px]  
+            border-gray-300 shadow-lg focus:border-[#FFFFFF]
+            focus:outline-none focus:ring-1
+            focus:ring-[#FFFFFF] rounded-lg px-3 py-3 text-md  bg-[#FFFFFF]"
+        {...rest}
+    />
+);
+});
+
+export default Input;`
+                        },
                     
                     ]
                 }
@@ -134,3 +162,15 @@ export default Input;`
     ],
 
 };
+try {
+    localStorage.setItem('fileTree', JSON.stringify(newTree));
+} catch (e) {
+    console.error("Failed to save file tree to localStorage:", e);
+}
+
+return newTree;
+}
+
+export const fileTree: IFile = loadFileTree();
+// localStorage.setItem('fileTree', JSON.stringify(fileTree));
+

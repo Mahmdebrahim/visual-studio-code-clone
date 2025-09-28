@@ -6,7 +6,7 @@ import OpendFilesBar from "./components/OpendFilesBar";
 function App() {
   return (
     <div className="">
-      <div className="flex h-screen">
+      <div className="flex w-screen h-screen">
         <div className="w-64 p-2 border-r-[1px] border-[#ffffff1f]">
           <RecursiveComponent file={fileTree} />
         </div>

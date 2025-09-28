@@ -11,9 +11,11 @@ import { doesEixstsFile } from "../utils/functions";
 import RenderFileIcon from "./RenderFileIcon";
 
 interface IProps {
-  file: IFile;
+  file: IFile | null,
 }
 const RecursiveComponent = ({ file }: IProps) => {
+  if (!file) return null;
+
   const { isFolder, name, chlidren, id, content } = file;
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const dispatch = useDispatch();
@@ -25,6 +27,7 @@ const RecursiveComponent = ({ file }: IProps) => {
       setClickedFile({ fileContent: content, fileName: name, activeFileId: id })
     );
 
+    // Check if file already opened
     const exists = doesEixstsFile(opendFiles, id);
     if (exists) return;
     dispatch(setOpendFiles([...opendFiles, file]));
